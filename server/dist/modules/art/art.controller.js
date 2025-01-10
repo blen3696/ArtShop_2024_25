@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ArtController = void 0;
 const common_1 = require("@nestjs/common");
@@ -20,11 +21,17 @@ const update_art_dto_1 = require("./dto/update-art.dto");
 const jwt_auth_guard_1 = require("../../common/guards/jwt-auth.guard");
 const roles_guard_1 = require("../../common/guards/roles.guard");
 const roles_decorator_1 = require("../../common/decorators/roles.decorator");
+const platform_express_1 = require("@nestjs/platform-express");
+const multer_1 = require("multer");
+const multer_2 = require("multer");
 let ArtController = class ArtController {
     constructor(artService) {
         this.artService = artService;
     }
-    create(createArtDto) {
+    create(createArtDto, image) {
+        if (image) {
+            createArtDto.imageUrl = `/uploads/${image.filename}`;
+        }
         return this.artService.create(createArtDto);
     }
     findAll() {
@@ -45,9 +52,19 @@ __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard),
     (0, roles_decorator_1.Roles)('admin'),
     (0, common_1.Post)(),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image', {
+        storage: (0, multer_1.diskStorage)({
+            destination: './uploads',
+            filename: (req, file, callback) => {
+                const filename = `${Date.now()}-${file.originalname}`;
+                callback(null, filename);
+            },
+        }),
+    })),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_art_dto_1.CreateArtDto]),
+    __metadata("design:paramtypes", [create_art_dto_1.CreateArtDto, typeof (_a = typeof multer_2.Multer !== "undefined" && multer_2.Multer.File) === "function" ? _a : Object]),
     __metadata("design:returntype", void 0)
 ], ArtController.prototype, "create", null);
 __decorate([

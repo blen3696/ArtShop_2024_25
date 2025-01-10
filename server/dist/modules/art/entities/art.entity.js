@@ -9,8 +9,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Art = void 0;
+exports.Art = exports.ArtCategory = void 0;
 const typeorm_1 = require("typeorm");
+var ArtCategory;
+(function (ArtCategory) {
+    ArtCategory["SCULPTURE"] = "sculpture";
+    ArtCategory["PAINTING"] = "painting";
+    ArtCategory["NATURE"] = "nature";
+})(ArtCategory || (exports.ArtCategory = ArtCategory = {}));
 let Art = class Art {
 };
 exports.Art = Art;
@@ -35,21 +41,20 @@ __decorate([
     __metadata("design:type", Number)
 ], Art.prototype, "quantity", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ default: true }),
-    __metadata("design:type", Boolean)
-], Art.prototype, "inStock", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Art.prototype, "imageUrl", void 0);
 __decorate([
-    (0, typeorm_1.CreateDateColumn)({ type: 'timestamp' }),
-    __metadata("design:type", Date)
-], Art.prototype, "createdAt", void 0);
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: ArtCategory,
+    }),
+    __metadata("design:type", String)
+], Art.prototype, "category", void 0);
 __decorate([
-    (0, typeorm_1.UpdateDateColumn)({ type: 'timestamp' }),
-    __metadata("design:type", Date)
-], Art.prototype, "updatedAt", void 0);
+    (0, typeorm_1.Column)({ default: true }),
+    __metadata("design:type", Boolean)
+], Art.prototype, "inStock", void 0);
 exports.Art = Art = __decorate([
     (0, typeorm_1.Entity)()
 ], Art);

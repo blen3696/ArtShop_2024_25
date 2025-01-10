@@ -121,11 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(changeBackgroundImage, 5000);
 });
 const shopNow = document.getElementById('shopNow');
-const redirectToOrderPage = (product) => {
-    localStorage.setItem("product", JSON.stringify(product));
-    window.location.href = "../order/order.html";
-};
-window.redirectToOrderPage = redirectToOrderPage;
 const handleIntersection = (entries, observer) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {

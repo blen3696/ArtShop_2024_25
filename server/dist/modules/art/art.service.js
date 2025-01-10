@@ -17,6 +17,8 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
 const art_entity_1 = require("./entities/art.entity");
+const fs = require("fs");
+const path = require("path");
 let ArtService = class ArtService {
     constructor(artRepository) {
         this.artRepository = artRepository;
@@ -24,6 +26,9 @@ let ArtService = class ArtService {
     async create(createArtDto) {
         const newArt = this.artRepository.create(createArtDto);
         newArt.inStock = createArtDto.quantity > 0;
+        if (createArtDto.imageUrl) {
+            newArt.imageUrl = createArtDto.imageUrl;
+        }
         return this.artRepository.save(newArt);
     }
     async findAll() {
@@ -40,10 +45,19 @@ let ArtService = class ArtService {
         const art = await this.findOne(id);
         const updatedArt = this.artRepository.merge(art, updateArtDto);
         updatedArt.inStock = updatedArt.quantity > 0;
+        if (updateArtDto.imageUrl) {
+            updatedArt.imageUrl = updateArtDto.imageUrl;
+        }
         return this.artRepository.save(updatedArt);
     }
     async remove(id) {
         const art = await this.findOne(id);
+        if (art.imageUrl) {
+            const imagePath = path.join(__dirname, '..', 'uploads', art.imageUrl);
+            if (fs.existsSync(imagePath)) {
+                fs.unlinkSync(imagePath);
+            }
+        }
         await this.artRepository.remove(art);
     }
 };

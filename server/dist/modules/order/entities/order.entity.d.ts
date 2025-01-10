@@ -4,7 +4,7 @@ export declare class Order {
     id: number;
     user: User;
     items: OrderItem[];
-    fullName: string;
+    fullname: string;
     phone: string;
     address: string;
     status: string;

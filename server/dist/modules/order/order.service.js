@@ -26,12 +26,10 @@ let OrderService = class OrderService {
         this.artRepository = artRepository;
     }
     async createOrder(createOrderDto, userId) {
-        const { fullName, phone, address, items } = createOrderDto;
+        const { fullname, phone, address, items } = createOrderDto;
         const orderItems = [];
         for (const item of items) {
-            const art = await this.artRepository.findOne({
-                where: { id: item.artId },
-            });
+            const art = await this.artRepository.findOne({ where: { id: item.artId } });
             if (!art) {
                 throw new common_1.NotFoundException(`Art with ID ${item.artId} not found`);
             }
@@ -49,7 +47,7 @@ let OrderService = class OrderService {
         }
         const order = this.orderRepository.create({
             user: { id: userId },
-            fullName,
+            fullname,
             phone,
             address,
             items: orderItems,
@@ -109,8 +107,8 @@ let OrderService = class OrderService {
         if (order.status.toLocaleLowerCase() !== 'pending') {
             throw new common_1.BadRequestException("Order cannot be updated because its status is not 'pending'");
         }
-        if (updateDto.fullName)
-            order.fullName = updateDto.fullName;
+        if (updateDto.fullname)
+            order.fullname = updateDto.fullname;
         if (updateDto.phone)
             order.phone = updateDto.phone;
         if (updateDto.address)
