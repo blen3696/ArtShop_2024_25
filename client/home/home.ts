@@ -143,18 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setInterval(changeBackgroundImage, 5000);
 });
 
-// Redirect function for the "Shop Now" button
-// Function to redirect to the order page with product details
 const shopNow=document.getElementById('shopNow') as HTMLButtonElement;
-const redirectToOrderPage = (product: Product) => {
-  // Save product details to localStorage or sessionStorage
-  localStorage.setItem("product", JSON.stringify(product));
-  
-  // Redirect to the order page
-  window.location.href = "../order/order.html";
-};
-
-(window as any).redirectToOrderPage = redirectToOrderPage;
 
 // Intersection Observer for animations
 const handleIntersection = (entries: IntersectionObserverEntry[], observer: IntersectionObserver): void => {
