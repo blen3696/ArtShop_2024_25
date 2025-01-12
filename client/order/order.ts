@@ -54,7 +54,6 @@ const fetchOrderDetails = async (token: string): Promise<Product[]> => {
 
     const myOrder = await response.json();
     console.log(JSON.stringify(myOrder, null, 2)); // Inspect the response structure
-
     // Map the API response to match the Product interface
     const products: Product[] = myOrder.flatMap((order: any) =>
       order.items.map((item: any) => ({
@@ -66,6 +65,7 @@ const fetchOrderDetails = async (token: string): Promise<Product[]> => {
     );
 
     return products;
+    console.log(products);
   } catch (error) {
     console.error("Error fetching order details:", error);
     return [];
@@ -79,6 +79,7 @@ const calculateTotalPrice = (products: Product[]): number => {
 };
 
 // Render order table
+// Render order table with Delete and Update buttons
 const renderOrderTable = (products: Product[]): void => {
   const tableBody = document.getElementById("order-table-body") as HTMLTableSectionElement;
   const totalPriceElement = document.getElementById("total-price") as HTMLSpanElement;
@@ -91,12 +92,40 @@ const renderOrderTable = (products: Product[]): void => {
       <td>${product.title}</td>
       <td>${product.quantity}</td>
       <td>$${(product.quantity * product.price).toFixed(2)}</td>
+      <td>
+        <button class="btn delete-button" data-id="${product.id}">Delete</button>
+        <button class="btn update-button" data-id="${product.id}">Update</button>
+      </td>
     `;
     tableBody.appendChild(row);
   });
 
   totalPriceElement.textContent = calculateTotalPrice(products).toFixed(2); // Update total price
+
+  // Add event listeners for Delete and Update buttons
+  const deleteButtons = document.querySelectorAll(".delete-button");
+  const updateButtons = document.querySelectorAll(".update-button");
+
+  deleteButtons.forEach((button) =>
+    button.addEventListener("click", (event) => {
+      const productId = (event.target as HTMLElement).getAttribute("data-id");
+      if(productId){
+        handleDeleteProduct(Number(productId),products);
+      }
+
+    })
+  );
+
+  updateButtons.forEach((button) =>
+    button.addEventListener("click", (event) => {
+      const productId = (event.target as HTMLElement).getAttribute("data-id");
+      if (productId) {
+        handleUpdateProduct(Number(productId));
+      }
+    })
+  );
 };
+
 const orderButton = document.getElementById("order-button") as HTMLButtonElement;
 const renderUserDataForm = (): void => {
   const formContainer = document.getElementById("user-data-form") as HTMLDivElement;
@@ -208,8 +237,23 @@ if (username11) {
 } else {
   window.location.href = '../login/index.html';
 }
-// Example function to render form inputs for user data
+  
 
+const handleDeleteProduct = async (productId: number, products: Product[]): Promise<void> => {
+  
+    const updatedProducts = products.filter((product) => product.id !== productId);
 
+    renderOrderTable(updatedProducts);
 
-// Call renderUserDataForm to display the for
+    alert("Product deleted successfully!");
+};
+
+const handleUpdateProduct = (productId: number): void => {
+  alert("Redirecting to the home page to update the product...");
+  window.location.href = `../home/index.html?id=${productId}`;
+};
+const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+if (!token) {
+  alert('You are not logged in. Please log in to continue.');
+  window.location.href = '../login/login.html';
+}

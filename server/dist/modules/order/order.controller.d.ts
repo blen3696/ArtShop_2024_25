@@ -7,11 +7,7 @@ export declare class OrderController {
     findUserOrders(req: any): Promise<import("./entities/order.entity").Order[]>;
     findAllOrders(): Promise<import("./entities/order.entity").Order[]>;
     updateOrderStatus(id: number, status: string): Promise<import("./entities/order.entity").Order>;
-    deleteOrder(id: number, req: any): Promise<{
-        message: string;
-        success: boolean;
-        data: any;
-    }>;
+    deleteOrder(orderId: number, req: any): Promise<void>;
     updateOrder(id: number, updateDto: Partial<CreateOrderDto>, req: any): Promise<import("./entities/order.entity").Order>;
     getOrderById(id: number, req: any): Promise<import("./entities/order.entity").Order>;
     getOrderByIdAdmin(id: number): Promise<import("./entities/order.entity").Order>;

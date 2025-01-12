@@ -12,3 +12,16 @@
 #user-data-form input{
     margin: 10px auto;
 }
+.delete-button{
+    background-color: rgb(121, 51, 46);
+}
+.update-button{
+    background-color: #145323;
+}
+.delete-button:hover{
+    background-color: rgb(184, 54, 45);
+    opacity: 0.8;
+}
+.update-button:hover{
+    background-color: #1b9136;
+}

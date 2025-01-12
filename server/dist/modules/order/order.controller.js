@@ -35,8 +35,12 @@ let OrderController = class OrderController {
     updateOrderStatus(id, status) {
         return this.orderService.updateOrderStatus(id, status);
     }
-    deleteOrder(id, req) {
-        return this.orderService.deleteOrder(+id, req.user.userId);
+    async deleteOrder(orderId, req) {
+        const userId = req.user.id;
+        const success = await this.orderService.deleteOrder(orderId, userId);
+        if (!success) {
+            throw new common_1.HttpException('Failed to delete order', common_1.HttpStatus.NOT_FOUND);
+        }
     }
     updateOrder(id, updateDto, req) {
         return this.orderService.updateOrder(+id, req.user.userId, updateDto);
@@ -87,11 +91,12 @@ __decorate([
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Delete)('/:id'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number, Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], OrderController.prototype, "deleteOrder", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),

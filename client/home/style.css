@@ -263,6 +263,9 @@
 #about-us.visible {
   animation: fadeIn 1s ease;
 }
+.nav-icons{
+  margin-left: auto;
+}
 
 
   

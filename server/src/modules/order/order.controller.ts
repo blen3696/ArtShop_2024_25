@@ -8,6 +8,9 @@ import {
   Patch,
   Request,
   Delete,
+  HttpCode,
+  HttpStatus,
+  HttpException,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -47,8 +50,13 @@ export class OrderController {
 
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
-  deleteOrder(@Param('id') id: number, @Request() req) {
-    return this.orderService.deleteOrder(+id, req.user.userId);
+  @HttpCode(HttpStatus.OK)
+  async deleteOrder(@Param('id') orderId: number, @Request() req) {
+    const userId = req.user.id; // Ensure user ID is extracted from the token
+    const success = await this.orderService.deleteOrder(orderId, userId);
+    if (!success) {
+      throw new HttpException('Failed to delete order', HttpStatus.NOT_FOUND);
+    }
   }
 
   @UseGuards(JwtAuthGuard)

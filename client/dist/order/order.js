@@ -54,6 +54,7 @@ const fetchOrderDetails = (token) => __awaiter(void 0, void 0, void 0, function*
             });
         }));
         return products;
+        console.log(products);
     }
     catch (error) {
         console.error("Error fetching order details:", error);
@@ -73,10 +74,28 @@ const renderOrderTable = (products) => {
       <td>${product.title}</td>
       <td>${product.quantity}</td>
       <td>$${(product.quantity * product.price).toFixed(2)}</td>
+      <td>
+        <button class="btn btn-danger delete-button" data-id="${product.id}">Delete</button>
+        <button class="btn btn-warning update-button" data-id="${product.id}">Update</button>
+      </td>
     `;
         tableBody.appendChild(row);
     });
     totalPriceElement.textContent = calculateTotalPrice(products).toFixed(2);
+    const deleteButtons = document.querySelectorAll(".delete-button");
+    const updateButtons = document.querySelectorAll(".update-button");
+    deleteButtons.forEach((button) => button.addEventListener("click", (event) => {
+        const productId = event.target.getAttribute("data-id");
+        if (productId) {
+            handleDeleteProduct(Number(productId), products);
+        }
+    }));
+    updateButtons.forEach((button) => button.addEventListener("click", (event) => {
+        const productId = event.target.getAttribute("data-id");
+        if (productId) {
+            handleUpdateProduct(Number(productId));
+        }
+    }));
 };
 const orderButton = document.getElementById("order-button");
 const renderUserDataForm = () => {
@@ -171,4 +190,18 @@ if (username11) {
 }
 else {
     window.location.href = '../login/index.html';
+}
+const handleDeleteProduct = (productId, products) => __awaiter(void 0, void 0, void 0, function* () {
+    const updatedProducts = products.filter((product) => product.id !== productId);
+    renderOrderTable(updatedProducts);
+    alert("Product deleted successfully!");
+});
+const handleUpdateProduct = (productId) => {
+    alert("Redirecting to the home page to update the product...");
+    window.location.href = `../home/index.html?id=${productId}`;
+};
+const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+if (!token) {
+    alert('You are not logged in. Please log in to continue.');
+    window.location.href = '../login/login.html';
 }
