@@ -12,13 +12,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateOrderDto = void 0;
 const class_validator_1 = require("class-validator");
 const class_transformer_1 = require("class-transformer");
+const swagger_1 = require("@nestjs/swagger");
 class OrderItemDto {
 }
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 1 }),
     (0, class_validator_1.IsInt)(),
     __metadata("design:type", Number)
 ], OrderItemDto.prototype, "artId", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 2, minimum: 1 }),
     (0, class_validator_1.IsInt)(),
     (0, class_validator_1.Min)(1),
     __metadata("design:type", Number)
@@ -27,21 +30,28 @@ class CreateOrderDto {
 }
 exports.CreateOrderDto = CreateOrderDto;
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 'Ruth Ambaw' }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateOrderDto.prototype, "fullname", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: '+251912345678' }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateOrderDto.prototype, "phone", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({ example: 'Bole, Addis Ababa, Ethiopia' }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateOrderDto.prototype, "address", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)({
+        type: [OrderItemDto],
+        example: [{ artId: 1, quantity: 2 }, { artId: 3, quantity: 1 }],
+    }),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.ValidateNested)({ each: true }),
     (0, class_transformer_1.Type)(() => OrderItemDto),
